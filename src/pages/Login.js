@@ -20,7 +20,7 @@ export default function Login() {
       type="password"
       placeholder="비밀번호를 작성해주세요."
       onChange={ (event) => setPassword(event.target.value) }
-      />
+      /> 
       <button>Log In</button>
     </form>
   )
