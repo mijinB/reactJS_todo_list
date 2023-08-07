@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function Login() {
+export default function SignUp() {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
 
@@ -21,7 +21,7 @@ export default function Login() {
       placeholder="비밀번호를 작성해주세요."
       onChange={ (event) => setPassword(event.target.value) }
       /> 
-      <button>Log In</button>
+      <button>Sign Up</button>
     </form>
   )
 }
