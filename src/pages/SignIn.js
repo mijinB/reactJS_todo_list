@@ -1,11 +1,31 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [disabledFlag, setDisabledFlag] = useState(true);
+
+  /**@function signInValidation
+   * 1. 이메일, 비밀번호 유효성 검사 후 bool값 추출
+   * 2. 추출한 bool 값으로 'Sign In' button 비활성화 여부 결정(useEffect 사용)
+   */
+  const signInValidation = () => {
+    let result = false;
+    const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*$/i;
+
+    if (!regExp.test(email)) {
+      result = true;
+    }
+    if (password.length < 8) {
+      result = true;
+    }
+    setDisabledFlag(result);
+  }
+
+  useEffect(signInValidation, [email, password]);
 
   /**@function goSignUp
    * 1. 회원가입(SignUp) 페이지로 이동
@@ -31,11 +51,11 @@ export default function SignIn() {
           param
         );
 
-        if(status === 200) {
-          navigate('/todo');
-        } else {
-          throw new Error('not status 200');
-        }
+      if (status === 200) {
+        navigate('/todo');
+      } else {
+        throw new Error('not status 200');
+      }
     } catch (error) {
       console.log(`[onSignInSubmit Error] ${error}`);
     }
@@ -61,6 +81,7 @@ export default function SignIn() {
         data-testid="password-input"
       />
       <button
+        disabled={disabledFlag}
         type='submit'
         data-testid="signin-button"
       >
