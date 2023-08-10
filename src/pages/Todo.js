@@ -9,7 +9,7 @@ export default function Todo() {
 
   const getTodos = async () => {
     try {
-      const {status, data} = await axios
+      const { status, data } = await axios
         .get(API_URL,
           {
             headers: {
@@ -17,8 +17,8 @@ export default function Todo() {
             }
           }
         );
-      
-      if(status === 200) {
+
+      if (status === 200) {
         setTodoList(data);
       } else {
         throw new Error('not status 200');
@@ -49,7 +49,7 @@ export default function Todo() {
         todo: todo
       }
 
-      const { status } = await axios
+      const { status, data } = await axios
         .post(API_URL,
           param,
           {
@@ -60,7 +60,7 @@ export default function Todo() {
         );
 
       if (status === 201) {
-        console.log(status);
+        setTodoList(currentList => [...currentList, data]);
       } else {
         throw new Error('not status 201');
       }
@@ -71,6 +71,64 @@ export default function Todo() {
     setTodo("");
   };
 
+  const onDeleteTodo = async (id) => {
+    try {
+      const { status } = await axios
+        .delete(`${API_URL}/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("signinToken")}`
+            }
+          }
+        );
+
+      if (status === 204) {
+        setTodoList(currentList => {
+          return currentList.filter(item => item.id !== id);
+        })
+      }
+    } catch (error) {
+      console.log(`[onDeleteTodo Error] ${error}`);
+    }
+  }
+
+  const onCheckBoxChange = async (todosItem, value, target) => {
+    try {
+      const param = {
+        todo: todosItem.todo,
+        isCompleted: value
+      }
+
+      const { status, data } = await axios
+        .put(`${API_URL}/${todosItem.id}`,
+          param,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("signinToken")}`
+            }
+          }
+        );
+
+      if (status === 200) {
+        setTodoList(currentList => {
+          return currentList.map(item => {
+            if (item.id === todosItem.id) {
+              return data;
+            } else {
+              return item;
+            }
+          })
+        });
+      }
+    } catch (error) {
+      console.log(`[onCheckBoxChange Error] ${error}`);
+    }
+  }
+
+  const underLineStyle = {
+    textDecoration: 'line-through'
+  }
+
   return (
     <div>
       <h1>My To Dos ({todoList.length})</h1>
@@ -80,13 +138,36 @@ export default function Todo() {
           type="text"
           placeholder="Write your to do..."
           onChange={(event) => setTodo(event.target.value)}
+          data-testid="new-todo-input"
         />
-        <button>Add Todo</button>
+        <button
+          type='submit'
+          data-testid="new-todo-add-button"
+        >
+          Add Todo
+        </button>
       </form>
       <hr />
       <ul>
         {todoList.map((item) => (
-          <li key={item.id}>{item.todo}</li>
+          <li key={item.id} style={item.isCompleted ? underLineStyle : {}}>
+            <input
+              type='checkbox'
+              value={item.isCompleted}
+              checked={item.isCompleted}
+              onChange={(event) => onCheckBoxChange(item, event.target.checked, "complete")}
+              data-testid="modify-input"
+            />
+            {item.todo}
+            <button type='button' data-testid="modify-button">수정</button>
+            <button
+              type='button'
+              onClick={() => onDeleteTodo(item.id)}
+              data-testid="delete-button"
+            >
+              삭제
+            </button>
+          </li>
         ))}
       </ul>
     </div>
