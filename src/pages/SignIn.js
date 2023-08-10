@@ -46,12 +46,13 @@ export default function SignIn() {
         password: password
       }
 
-      const { status } = await axios
+      const {status, data} = await axios
         .post("https://www.pre-onboarding-selection-task.shop/auth/signin",
           param
         );
 
       if (status === 200) {
+        localStorage.setItem("signinToken", data.access_token);
         navigate('/todo');
       } else {
         throw new Error('not status 200');
