@@ -10,15 +10,15 @@ export default function SignUp() {
       <input
       required
       value={email}
-      type="email"
-      placeholder="이메일을 작성해주세요."
+      type='email'
+      placeholder='이메일을 작성해주세요.'
       onChange={ (event) => setEmail(event.target.value) }
       />
       <input
       required
       value={password}
-      type="password"
-      placeholder="비밀번호를 작성해주세요."
+      type='password'
+      placeholder='비밀번호를 작성해주세요.'
       onChange={ (event) => setPassword(event.target.value) }
       /> 
       <button>Sign Up</button>

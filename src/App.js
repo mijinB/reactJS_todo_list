@@ -5,10 +5,10 @@ import SignInComponent from './pages/SignIn';
 
 function App() {
   return (
-    <div className="container">
+    <div className='container'>
       <Routes>
-        <Route path='/' element={<SignUpComponent />} />
-        <Route path='/signin' element={<SignInComponent />} />
+        <Route path='/' element={<SignInComponent />} />
+        <Route path='/signup' element={<SignUpComponent />} />
       </Routes>
     </div>
   );
