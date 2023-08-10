@@ -7,6 +7,11 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  /**@function onSignUpSubmit
+   * 1. submit 이벤트 발생 시 페이지 새로고침 막기
+   * 2. 회원가입 email, password API로 전송
+   * 3. API전송 성공 시 로그인(SignIn) 페이지로 이동
+   */
   const onSignUpSubmit = async (event) => {
     event.preventDefault();
 

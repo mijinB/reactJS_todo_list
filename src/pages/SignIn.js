@@ -7,10 +7,13 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
 
   /**@function goSignUp
-   * 1. 회원가입 페이지로 이동
+   * 1. 회원가입(SignUp) 페이지로 이동
    */
   const goSignUp = () => navigate('/signup');
 
+  /**@function onSignInSubmit
+   * 1. submit 이벤트 발생 시 페이지 새로고침 막기
+   */
   const onSignInSubmit = (event) => event.preventDefault();
 
   return (
