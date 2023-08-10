@@ -11,10 +11,10 @@ export default function SignIn() {
    */
   const goSignUp = () => navigate('/signup');
 
-  const onSignUpSubmit = (event) => event.preventDefault();
+  const onSignInSubmit = (event) => event.preventDefault();
 
   return (
-    <form onSubmit={onSignUpSubmit}>
+    <form onSubmit={onSignInSubmit}>
       {console.log(email, password)}
       <input
       required

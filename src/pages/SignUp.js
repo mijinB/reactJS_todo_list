@@ -1,12 +1,31 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 
 export default function SignUp() {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
 
+  const onSignUpSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const param = {
+        email: email,
+        password: password
+      }
+    
+      const signUpResponse = await axios
+        .post("https://www.pre-onboarding-selection-task.shop/auth/signup",
+        param
+        );
+    } catch(error) {
+      console.log(`[onSignUpSubmit Error] ${error}`);
+    }
+  }
+
   return (
-    <form>
-      {console.log(password)}
+    <form onSubmit={onSignUpSubmit}>
+      {console.log(email, password)}
       <input
       required
       value={email}
@@ -21,7 +40,7 @@ export default function SignUp() {
       placeholder='비밀번호를 작성해주세요.'
       onChange={ (event) => setPassword(event.target.value) }
       /> 
-      <button>Sign Up</button>
+      <button type='submit'>Sign Up</button>
     </form>
   )
 }
