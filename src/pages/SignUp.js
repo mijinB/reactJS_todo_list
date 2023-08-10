@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,12 +16,16 @@ export default function SignUp() {
         password: password
       }
 
-      const signUpResponse = await axios
+      const { status } = await axios
         .post("https://www.pre-onboarding-selection-task.shop/auth/signup",
           param
         );
 
-      console.log(signUpResponse);
+      if (status === 201) {
+        navigate('/');
+      } else {
+        throw new Error('not status 201');
+      }
     } catch (error) {
       console.log(`[onSignUpSubmit Error] ${error}`);
     }
@@ -40,6 +46,7 @@ export default function SignUp() {
         required
         value={password}
         type='password'
+        minLength={8}
         placeholder='비밀번호를 작성해주세요.'
         onChange={(event) => setPassword(event.target.value)}
         data-testid="password-input"
