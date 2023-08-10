@@ -165,7 +165,7 @@ export default function Todo() {
           type='submit'
           data-testid="new-todo-add-button"
         >
-          Add Todo
+          추가
         </button>
       </form>
       <hr />
@@ -173,6 +173,7 @@ export default function Todo() {
         {todoList.map((item) => (
           <li key={item.id} style={item.isCompleted ? underLineStyle : {}}>
             <input
+              id={item.id}
               type='checkbox'
               value={item.isCompleted}
               checked={item.isCompleted}
@@ -225,7 +226,11 @@ export default function Todo() {
                   </button>
                 </>
                 : <>
-                  {item.todo}
+                  <label htmlFor={item.id}>
+                    <span>
+                      {item.todo}
+                    </span>
+                  </label>
                   <button
                     type='button'
                     onClick={() => onModifyButtonClick(item)}

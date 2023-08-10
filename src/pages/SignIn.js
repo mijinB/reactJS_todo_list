@@ -86,9 +86,9 @@ export default function SignIn() {
         type='submit'
         data-testid="signin-button"
       >
-        Log In
+        로그인
       </button>
-      <button type='button' onClick={goSignUp}>Sign Up</button>
+      <button type='button' onClick={goSignUp}>회원가입</button>
     </form>
   )
 }

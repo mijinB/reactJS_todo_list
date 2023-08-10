@@ -81,7 +81,7 @@ export default function SignUp() {
         type='submit'
         data-testid="signup-button"
       >
-        Sign Up
+        회원가입
       </button>
     </form>
   )
