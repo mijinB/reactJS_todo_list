@@ -4,6 +4,11 @@ import React, { useEffect, useState } from 'react'
 export default function Todo() {
   const [todo, setTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
+  const [modifyObject, setModifyObject] = useState({
+    todo: null,
+    id: null,
+    flag: false
+  });
 
   const API_URL = "https://www.pre-onboarding-selection-task.shop/todos";
 
@@ -92,15 +97,31 @@ export default function Todo() {
     }
   }
 
-  const onCheckBoxChange = async (todosItem, value, target) => {
+  const onModifyButtonClick = (todosItem) => {
+    setModifyObject({
+      todo: todosItem.todo,
+      id: todosItem.id,
+      flag: true
+    })
+  }
+
+  const initModifyObject = () => {
+    setModifyObject({
+      todo: null,
+      id: null,
+      flag: false
+    })
+  }
+
+  const onUpdateTodo = async (setObj) => {
     try {
       const param = {
-        todo: todosItem.todo,
-        isCompleted: value
+        todo: setObj.setTodo,
+        isCompleted: setObj.setCompleted
       }
 
       const { status, data } = await axios
-        .put(`${API_URL}/${todosItem.id}`,
+        .put(`${API_URL}/${setObj.todoId}`,
           param,
           {
             headers: {
@@ -112,7 +133,7 @@ export default function Todo() {
       if (status === 200) {
         setTodoList(currentList => {
           return currentList.map(item => {
-            if (item.id === todosItem.id) {
+            if (item.id === setObj.todoId) {
               return data;
             } else {
               return item;
@@ -121,7 +142,7 @@ export default function Todo() {
         });
       }
     } catch (error) {
-      console.log(`[onCheckBoxChange Error] ${error}`);
+      console.log(`[onUpdateTodo Error] ${error}`);
     }
   }
 
@@ -155,18 +176,71 @@ export default function Todo() {
               type='checkbox'
               value={item.isCompleted}
               checked={item.isCompleted}
-              onChange={(event) => onCheckBoxChange(item, event.target.checked, "complete")}
+              onChange={(event) => {
+                const setObj = {
+                  todoId: item.id,
+                  setTodo: item.todo,
+                  setCompleted: event.target.checked
+                }
+
+                onUpdateTodo(setObj);
+              }}
               data-testid="modify-input"
             />
-            {item.todo}
-            <button type='button' data-testid="modify-button">수정</button>
-            <button
-              type='button'
-              onClick={() => onDeleteTodo(item.id)}
-              data-testid="delete-button"
-            >
-              삭제
-            </button>
+            {
+              (item.id === modifyObject.id && modifyObject.flag)
+                ? <>
+                  <input
+                    value={modifyObject.todo}
+                    onChange={(event) => {
+                      setModifyObject({
+                        ...modifyObject,
+                        todo: event.target.value
+                      });
+                    }}
+                    data-testid="modify-input"
+                  />
+                  <button
+                    type='button'
+                    onClick={() => {
+                      const setObj = {
+                        todoId: item.id,
+                        setTodo: modifyObject.todo,
+                        setCompleted: item.isCompleted
+                      }
+
+                      onUpdateTodo(setObj);
+                      initModifyObject();
+                    }}
+                    data-testid="submit-button"
+                  >
+                    제출
+                  </button>
+                  <button
+                    type='button'
+                    onClick={() => initModifyObject()}
+                    data-testid="cancel-button"
+                  >
+                    취소
+                  </button>
+                </>
+                : <>
+                  {item.todo}
+                  <button
+                    type='button'
+                    onClick={() => onModifyButtonClick(item)}
+                    data-testid="modify-button"
+                  >
+                    수정
+                  </button>
+                  <button
+                    type='button'
+                    onClick={() => onDeleteTodo(item.id)}
+                    data-testid="delete-button"
+                  >
+                    삭제
+                  </button>
+                </>}
           </li>
         ))}
       </ul>
