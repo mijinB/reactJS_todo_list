@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -13,8 +14,32 @@ export default function SignIn() {
 
   /**@function onSignInSubmit
    * 1. submit 이벤트 발생 시 페이지 새로고침 막기
+   * 2. 로그인 email, password API로 전송
+   * 3. API전송 성공 시 Todo 페이지로 이동
    */
-  const onSignInSubmit = (event) => event.preventDefault();
+  const onSignInSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const param = {
+        email: email,
+        password: password
+      }
+
+      const { status } = await axios
+        .post("https://www.pre-onboarding-selection-task.shop/auth/signin",
+          param
+        );
+
+        if(status === 200) {
+          navigate('/todo');
+        } else {
+          throw new Error('not status 200');
+        }
+    } catch (error) {
+      console.log(`[onSignInSubmit Error] ${error}`);
+    }
+  }
 
   return (
     <form onSubmit={onSignInSubmit}>
