@@ -97,7 +97,7 @@ export default function SignUp() {
           margin: "0 auto",
         }}
       >
-        <div
+        <h2
           style={{
             marginBottom: 40,
             textAlign: "center",
@@ -106,7 +106,7 @@ export default function SignUp() {
           }}
         >
           {"\u{1F431} Sign Up"}
-        </div>
+        </h2>
         <Form.Item>
           <Input
             value={email}
