@@ -36,13 +36,10 @@ export default function SignIn() {
   const goSignUp = () => navigate('/signup');
 
   /**@function onSignInSubmit
-   * 1. submit 이벤트 발생 시 페이지 새로고침 막기
-   * 2. 로그인 email, password API로 전송
-   * 3. API전송 성공 시 JWT(signinToken)을 localStorage에 저장 & Todo 페이지로 이동
+   * 1. 로그인 email, password API로 전송
+   * 2. API전송 성공 시 JWT(signinToken)을 localStorage에 저장 & Todo 페이지로 이동
    */
-  const onSignInSubmit = async (event) => {
-    event.preventDefault();
-
+  const onSignInSubmit = async () => {
     try {
       const param = {
         email: email,
@@ -97,7 +94,7 @@ export default function SignIn() {
       }}
     >
       <Form
-        onSubmit={onSignInSubmit}
+        onFinish={onSignInSubmit}
         style={{
           display: "flex",
           flexDirection: "column",

@@ -30,13 +30,10 @@ export default function SignUp() {
   useEffect(signUpValidation, [email, password]);
 
   /**@function onSignUpSubmit
-   * 1. submit 이벤트 발생 시 페이지 새로고침 막기
-   * 2. 회원가입 email, password API로 전송
-   * 3. API전송 성공 시 로그인(SignIn) 페이지로 이동
+   * 1. 회원가입 email, password API로 전송
+   * 2. API전송 성공 시 로그인(SignIn) 페이지로 이동
    */
-  const onSignUpSubmit = async (event) => {
-    event.preventDefault();
-
+  const onSignUpSubmit = async () => {
     try {
       const param = {
         email: email,
@@ -90,7 +87,7 @@ export default function SignUp() {
       }}
     >
       <Form
-        onSubmit={onSignUpSubmit}
+        onFinish={onSignUpSubmit}
         style={{
           display: "flex",
           flexDirection: "column",
