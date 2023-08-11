@@ -1,6 +1,8 @@
+import { Button, Card, Form, Input, Space } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { LockOutlined, SmileFilled, UserOutlined } from '@ant-design/icons';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -57,31 +59,96 @@ export default function SignUp() {
   }
 
   return (
-    <form onSubmit={onSignUpSubmit}>
-      <input
-        required
-        value={email}
-        type='email'
-        placeholder='이메일을 작성해주세요.'
-        onChange={event => setEmail(event.target.value)}
-        data-testid="email-input"
-      />
-      <input
-        required
-        value={password}
-        type='password'
-        minLength={8}
-        placeholder='비밀번호를 작성해주세요.'
-        onChange={event => setPassword(event.target.value)}
-        data-testid="password-input"
-      />
-      <button
-        disabled={disabledFlag}
-        type='submit'
-        data-testid="signup-button"
+    <Card
+      size='small'
+      title={
+        <Space style={{ columnGap: 7 }}>
+          <SmileFilled style={{ color: "#FF6059" }} />
+          <SmileFilled style={{ color: "#FFBD2D" }} />
+          <SmileFilled style={{ color: "#2ACA41" }} />
+          <div
+            style={{
+              width: 669,
+              height: 25,
+              marginLeft: 12,
+              borderRadius: 5,
+              backgroundColor: "white"
+            }}
+          />
+        </Space>
+      }
+      style={{
+        minWidth: 800,
+        minHeight: 500,
+        background: "none"
+      }}
+      headStyle={{
+        backgroundColor: "#EDEDED"
+      }}
+      bodyStyle={{
+        backgroundColor: "rgba(255, 255, 255, .3)",
+      }}
+    >
+      <Form
+        onSubmit={onSignUpSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          width: 450,
+          height: 437,
+          margin: "0 auto",
+        }}
       >
-        회원가입
-      </button>
-    </form>
+        <div
+          style={{
+            marginBottom: 40,
+            textAlign: "center",
+            fontSize: 27,
+            fontWeight: 600
+          }}
+        >
+          {"\u{1F431} Sign Up"}
+        </div>
+        <Form.Item>
+          <Input
+            value={email}
+            type='email'
+            placeholder='이메일을 작성해주세요.'
+            onChange={event => setEmail(event.target.value)}
+            style={{
+              height: 43
+            }}
+            prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+            data-testid="email-input"
+          />
+          <Input
+            value={password}
+            type='password'
+            placeholder='비밀번호를 작성해주세요.'
+            onChange={event => setPassword(event.target.value)}
+            style={{
+              height: 43,
+              marginTop: 8
+            }}
+            prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+            data-testid="password-input"
+          />
+        </Form.Item>
+        <Button
+          disabled={disabledFlag}
+          type='primary'
+          htmlType='submit'
+          className='login-form-button'
+          style={{
+            width: "100%",
+            height: 43
+          }}
+          data-testid="signup-button"
+        >
+          회원가입
+        </Button>
+      </Form>
+    </Card>
   )
 }

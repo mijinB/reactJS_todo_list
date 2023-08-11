@@ -108,12 +108,12 @@ export default function SignIn() {
         }}
       >
         <div
-        style={{
-          marginBottom: 40,
-          textAlign: "center",
-          fontSize: 27,
-          fontWeight: 600
-        }}
+          style={{
+            marginBottom: 40,
+            textAlign: "center",
+            fontSize: 27,
+            fontWeight: 600
+          }}
         >
           {"\u{1F431} Log In"}
         </div>
@@ -129,15 +129,14 @@ export default function SignIn() {
             prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
             data-testid="email-input"
           />
-        </Form.Item>
-        <Form.Item>
           <Input
             value={password}
             type='password'
             placeholder='비밀번호를 작성해주세요.'
             onChange={(event) => setPassword(event.target.value)}
             style={{
-              height: 43
+              height: 43,
+              marginTop: 8
             }}
             prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
             data-testid="password-input"
@@ -151,6 +150,7 @@ export default function SignIn() {
             className='login-form-button'
             style={{
               width: "100%",
+              height: 43
             }}
             data-testid="signin-button"
           >
@@ -162,7 +162,8 @@ export default function SignIn() {
             className='login-form-button'
             onClick={goSignUp}
             style={{
-              width: "100%"
+              width: "100%",
+              height: 43
             }}
           >
             회원가입
