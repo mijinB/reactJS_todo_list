@@ -1,3 +1,5 @@
+import { HeartOutlined, SmileFilled } from '@ant-design/icons';
+import { Button, Card, Checkbox, Form, Input, List, Space } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
@@ -43,15 +45,12 @@ export default function Todo() {
   }, []);
 
   /**@function onCreateTodo
-   * 1. submit 이벤트 발생 시 페이지 새로고침 막기
-   * 2. toDo 입력란이 빈값이면 아무것도 return 하지 않는다.
-   * 3. 빈값이 아니면 입력 값(todo)을 API로 전송
-   * 4. API전송 성공 시 넘어오는 data를 todoList에 추가(기존List + data)
-   * 5. toDo 입력란을 빈값으로 초기화
+   * 1. toDo 입력란이 빈값이면 아무것도 return 하지 않는다.
+   * 2. 빈값이 아니면 입력 값(todo)을 API로 전송
+   * 3. API전송 성공 시 넘어오는 data를 todoList에 추가(기존List + data)
+   * 4. toDo 입력란을 빈값으로 초기화
    */
-  const onCreateTodo = async (event) => {
-    event.preventDefault();
-
+  const onCreateTodo = async () => {
     if (todo === "") {
       return;
     }
@@ -174,104 +173,226 @@ export default function Todo() {
   }
 
   return (
-    <div>
-      <h1>My To Dos ({todoList.length})</h1>
-      <form onSubmit={onCreateTodo}>
-        <input
-          value={todo}
-          type="text"
-          placeholder="Write your to do..."
-          onChange={(event) => setTodo(event.target.value)}
-          data-testid="new-todo-input"
-        />
-        <button
-          type='submit'
+    <Card
+      size='small'
+      title={
+        <Space style={{ columnGap: 7 }}>
+          <SmileFilled style={{ color: "#FF6059" }} />
+          <SmileFilled style={{ color: "#FFBD2D" }} />
+          <SmileFilled style={{ color: "#2ACA41" }} />
+          <div
+            style={{
+              width: 669,
+              height: 25,
+              marginLeft: 12,
+              borderRadius: 5,
+              backgroundColor: "white"
+            }}
+          />
+        </Space>
+      }
+      style={{
+        minWidth: 800,
+        minHeight: 800,
+        background: "none"
+      }}
+      headStyle={{
+        backgroundColor: "#EDEDED"
+      }}
+      bodyStyle={{
+        backgroundColor: "rgba(255, 255, 255, .3)",
+      }}
+    >
+      <Form
+        onFinish={onCreateTodo}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          width: 450,
+          height: 737,
+          margin: "0 auto",
+        }}
+      >
+        <h2
+          style={{
+            marginBottom: 40,
+            textAlign: "center",
+            fontSize: 27,
+            fontWeight: 600
+          }}
+        >
+          {"\u{1F430} To Do List"}
+        </h2>
+        <Form.Item>
+          <Input
+            value={todo}
+            type="text"
+            placeholder="Write your to do..."
+            onChange={(event) => setTodo(event.target.value)}
+            style={{
+              height: 43
+            }}
+            prefix={<HeartOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+            data-testid="new-todo-input"
+          />
+        </Form.Item>
+        <Button
+          type='primary'
+          htmlType='submit'
+          className='login-form-button'
+          style={{
+            width: "100%",
+            height: 43,
+            marginBottom: 50
+          }}
           data-testid="new-todo-add-button"
         >
           추가
-        </button>
-      </form>
-      <hr />
-      <ul>
-        {todoList.map((item) => (
-          <li key={item.id} style={item.isCompleted ? underLineStyle : {}}>
-            <input
-              id={item.id}
-              type='checkbox'
-              value={item.isCompleted}
-              checked={item.isCompleted}
-              onChange={(event) => {
-                const setObj = {
-                  todoId: item.id,
-                  setTodo: item.todo,
-                  setCompleted: event.target.checked
-                }
+        </Button>
+        <div
+          id="scrollableDiv"
+          style={{
+            overflow: 'auto',
+            height: 330,
+            padding: '8px 16px',
+            border: '1px solid rgba(140, 140, 140, 0.35)',
+            borderRadius: 8
+          }}
+        >
+          <List
+            dataSource={todoList}
+            renderItem={(item) => (
+              <List.Item
+                key={item.id}
+                style={item.isCompleted ? underLineStyle : {}}
+                actions={[
+                  (item.id === modifyObject.id && modifyObject.flag)
+                    ? <>
+                      <Button
+                        type='text'
+                        htmlType='button'
+                        className='login-form-button'
+                        style={{
+                          height: "auto",
+                          padding: 0,
+                          marginRight: 5,
+                          color: "#ff7875",
+                          fontWeight: 600
+                        }}
+                        onClick={() => {
+                          const setObj = {
+                            todoId: item.id,
+                            setTodo: modifyObject.todo,
+                            setCompleted: item.isCompleted
+                          }
 
-                onUpdateTodo(setObj);
-              }}
-              data-testid="modify-input"
-            />
-            {
-              (item.id === modifyObject.id && modifyObject.flag)
-                ? <>
-                  <input
-                    value={modifyObject.todo}
-                    onChange={(event) => {
-                      setModifyObject({
-                        ...modifyObject,
-                        todo: event.target.value
-                      });
-                    }}
-                    data-testid="modify-input"
-                  />
-                  <button
-                    type='button'
-                    onClick={() => {
-                      const setObj = {
-                        todoId: item.id,
-                        setTodo: modifyObject.todo,
-                        setCompleted: item.isCompleted
-                      }
+                          onUpdateTodo(setObj);
+                          initModifyObject();
+                        }}
+                        data-testid="submit-button"
+                      >
+                        제출
+                      </Button>
+                      <Button
+                        type='text'
+                        htmlType='button'
+                        className='login-form-button'
+                        style={{
+                          height: "auto",
+                          padding: 0,
+                          color: "#ff7875",
+                          fontWeight: 600
+                        }}
+                        onClick={() => initModifyObject()}
+                        data-testid="cancel-button"
+                      >
+                        취소
+                      </Button>
+                    </>
+                    : <>
+                      <Button
+                        type='text'
+                        htmlType='button'
+                        className='login-form-button'
+                        style={{
+                          height: "auto",
+                          padding: 0,
+                          marginRight: 5,
+                          color: "#ff7875",
+                          fontWeight: 600
+                        }}
+                        onClick={() => onModifyButtonClick(item)}
+                        data-testid="modify-button"
+                      >
+                        수정
+                      </Button>
+                      <Button
+                        type='text'
+                        htmlType='button'
+                        className='login-form-button'
+                        style={{
+                          height: "auto",
+                          padding: 0,
+                          color: "#ff7875",
+                          fontWeight: 600
+                        }}
+                        onClick={() => onDeleteTodo(item.id)}
+                        data-testid="delete-button"
+                      >
+                        삭제
+                      </Button>
+                    </>
+                ]}
+              >
+                <List.Item.Meta
+                  avatar={
+                    <Checkbox
+                      id={item.id}
+                      value={item.isCompleted}
+                      checked={item.isCompleted}
+                      onChange={(event) => {
+                        const setObj = {
+                          todoId: item.id,
+                          setTodo: item.todo,
+                          setCompleted: event.target.checked
+                        }
 
-                      onUpdateTodo(setObj);
-                      initModifyObject();
-                    }}
-                    data-testid="submit-button"
-                  >
-                    제출
-                  </button>
-                  <button
-                    type='button'
-                    onClick={() => initModifyObject()}
-                    data-testid="cancel-button"
-                  >
-                    취소
-                  </button>
-                </>
-                : <>
-                  <label htmlFor={item.id}>
-                    <span>
-                      {item.todo}
-                    </span>
-                  </label>
-                  <button
-                    type='button'
-                    onClick={() => onModifyButtonClick(item)}
-                    data-testid="modify-button"
-                  >
-                    수정
-                  </button>
-                  <button
-                    type='button'
-                    onClick={() => onDeleteTodo(item.id)}
-                    data-testid="delete-button"
-                  >
-                    삭제
-                  </button>
-                </>}
-          </li>
-        ))}
-      </ul>
-    </div>
+                        onUpdateTodo(setObj);
+                      }}
+                      data-testid="modify-input"
+                    />
+                  }
+                  title={
+                    (item.id === modifyObject.id && modifyObject.flag)
+                      ? <Input
+                        value={modifyObject.todo}
+                        type='text'
+                        onChange={(event) => {
+                          setModifyObject({
+                            ...modifyObject,
+                            todo: event.target.value
+                          });
+                        }}
+                        style={{
+                          height: 23
+                        }}
+                        data-testid="modify-input"
+                      />
+                      : <label htmlFor={item.id}>
+                        <span>
+                          {item.todo}
+                        </span>
+                      </label>
+                  }
+                >
+                </List.Item.Meta>
+              </List.Item>
+            )}
+          >
+          </List>
+        </div>
+      </Form >
+    </Card >
   );
 }
