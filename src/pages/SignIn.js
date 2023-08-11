@@ -35,7 +35,7 @@ export default function SignIn() {
   /**@function onSignInSubmit
    * 1. submit 이벤트 발생 시 페이지 새로고침 막기
    * 2. 로그인 email, password API로 전송
-   * 3. API전송 성공 시 JWT을 localStorage에 저장 & Todo 페이지로 이동
+   * 3. API전송 성공 시 JWT(signinToken)을 localStorage에 저장 & Todo 페이지로 이동
    */
   const onSignInSubmit = async (event) => {
     event.preventDefault();
@@ -64,7 +64,6 @@ export default function SignIn() {
 
   return (
     <form onSubmit={onSignInSubmit}>
-      {console.log(email, password)}
       <input
         required
         value={email}

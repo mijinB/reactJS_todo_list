@@ -47,7 +47,7 @@ export default function SignUp() {
         );
 
       if (status === 201) {
-        navigate('/');
+        navigate('/signin');
       } else {
         throw new Error('not status 201');
       }
@@ -58,7 +58,6 @@ export default function SignUp() {
 
   return (
     <form onSubmit={onSignUpSubmit}>
-      {console.log(email, password)}
       <input
         required
         value={email}

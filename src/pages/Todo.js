@@ -12,6 +12,11 @@ export default function Todo() {
 
   const API_URL = "https://www.pre-onboarding-selection-task.shop/todos";
 
+  /**@function getTodos
+   * 1. API에서 저장되어 있는 todo List를 가져오기(get)
+   * 2. get 성공 시 가져와진 data를 todoList에 저장
+   * 3. 이 함수는 화면 로딩 시 한 번만 호출
+   */
   const getTodos = async () => {
     try {
       const { status, data } = await axios
@@ -37,10 +42,12 @@ export default function Todo() {
     getTodos()
   }, []);
 
-  /**@function onSubmit
+  /**@function onCreateTodo
    * 1. submit 이벤트 발생 시 페이지 새로고침 막기
-   * 2. toDo 입력란이 빈값이 아니면 setToDoList를 이용해서 toDo 추가
-   * 3. toDo 입력란 빈값으로 초기화
+   * 2. toDo 입력란이 빈값이면 아무것도 return 하지 않는다.
+   * 3. 빈값이 아니면 입력 값(todo)을 API로 전송
+   * 4. API전송 성공 시 넘어오는 data를 todoList에 추가(기존List + data)
+   * 5. toDo 입력란을 빈값으로 초기화
    */
   const onCreateTodo = async (event) => {
     event.preventDefault();
@@ -76,6 +83,10 @@ export default function Todo() {
     setTodo("");
   };
 
+  /**@function onDeleteTodo
+   * 1. 삭제를 원하는 todo의 id값을 이용해서 API에게 해당 todo 삭제 요청
+   * 2. 삭제 성공 시 기존 todoList에서 삭제한 id에 해당하는 todo 제외시키기(filter)
+   */
   const onDeleteTodo = async (id) => {
     try {
       const { status } = await axios
@@ -97,22 +108,10 @@ export default function Todo() {
     }
   }
 
-  const onModifyButtonClick = (todosItem) => {
-    setModifyObject({
-      todo: todosItem.todo,
-      id: todosItem.id,
-      flag: true
-    })
-  }
-
-  const initModifyObject = () => {
-    setModifyObject({
-      todo: null,
-      id: null,
-      flag: false
-    })
-  }
-
+  /**@function onUpdateTodo
+   * 1. 완료여부(checkbox)의 isCompleted와 수정모드에서 수정한 todo의 변경사항을 API로 전송
+   * 2. API전송 성공 시 todoList에 변경사항 적용(변경된 todo의 id에 해당하는 todo만 변경, 그 외 기존유지)
+   */
   const onUpdateTodo = async (setObj) => {
     try {
       const param = {
@@ -144,6 +143,30 @@ export default function Todo() {
     } catch (error) {
       console.log(`[onUpdateTodo Error] ${error}`);
     }
+  }
+
+  /**@function onModifyButtonClick
+   * 1. modifyObject의 값 변경
+   * 2. 수정을 원하는 todo의 id에 해당하는 UI를 수정모드(input,buttonX2)로 변경하기 위함
+   */
+  const onModifyButtonClick = (todosItem) => {
+    setModifyObject({
+      todo: todosItem.todo,
+      id: todosItem.id,
+      flag: true
+    })
+  }
+
+  /**@function initModifyObject
+   * 1. modifyObject의 값 초기화
+   * 2. 수정모드 UI를 원래 UI로 돌려놓기 위함
+   */
+  const initModifyObject = () => {
+    setModifyObject({
+      todo: null,
+      id: null,
+      flag: false
+    })
   }
 
   const underLineStyle = {
